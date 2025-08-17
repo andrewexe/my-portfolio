@@ -22,8 +22,8 @@ const META = {
     title: "Portfolio",
     school: "University of Florida",
     major: "Computer Science",
-    gpa: "3.9",
-    years: "2023–2027",
+    gpa: "3.63",
+    years: "May 2027",
     location: "Gainesville, FL",
 };
 
@@ -217,17 +217,26 @@ function TopHeader({ onResume }) {
                 </div>
 
                 {/* Center: nav icons */}
+                {/* Center: nav icons */}
                 <nav className="flex items-center justify-center">
                     <ul className="flex items-center gap-6 sm:gap-8 md:gap-10 lg:gap-12">
                         {[
+                            // Home button still links to the top of the page
                             { href: "#top", Icon: Home, label: "Home" },
-                            { href: "#about", Icon: Mail, label: "About" },
-                            { href: "#contact", Icon: Linkedin, label: "Contact" },
-                            { href: "#projects", Icon: Github, label: "Projects / GitHub" },
+                            // Updated to your actual email
+                            { href: "mailto:andrew03huang@gmail.com", Icon: Mail, label: "Email" },
+                            // Updated to your LinkedIn URL
+                            { href: "https://linkedin.com/in/andrew-huang-uf", Icon: Linkedin, label: "LinkedIn" },
+                            // Updated to your GitHub URL
+                            { href: "https://github.com/andrewexe", Icon: Github, label: "GitHub" },
                         ].map(({ href, Icon, label }) => (
                             <li key={href}>
                                 <a
                                     href={href}
+                                    // This makes the link open in a new tab
+                                    target="_blank"
+                                    // This is important for security when using target="_blank"
+                                    rel="noopener noreferrer"
                                     className="inline-flex items-center justify-center rounded-full p-3 sm:p-4 hover:bg-white/15 transition-transform duration-150 hover:scale-110"
                                     title={label}
                                     aria-label={label}
