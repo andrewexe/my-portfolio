@@ -111,34 +111,14 @@ const SKILLS = [
 ];
 
 const SONGS = [
-    {
-        title: "Back To U",
-        artist: "Slander",
-        src: "/music/slander.mp3",
-    },
-    {
-        title: "Right Now",
-        artist: "PARTYNXTDOOR",
-        src: "/music/rn.mp3",
-    },
-    {
-        title: "The Morning",
-        artist: "The Weeknd",
-        src: "/music/morning.mp3",
-    },
-    {
-        title: "Champagne Coast",
-        artist: "Blood Orange",
-        src: "/music/cc.mp3",
-    },
-    {
-        title: "No Broke Boys",
-        artist: "Disco Lines",
-        src: "/music/nbb.mp3",
-    },
+    { title: "Back To U", artist: "Slander", src: "/music/slander.mp3" },
+    { title: "Right Now", artist: "PARTYNXTDOOR", src: "/music/rn.mp3" },
+    { title: "The Morning", artist: "The Weeknd", src: "/music/morning.mp3" },
+    { title: "Champagne Coast", artist: "Blood Orange", src: "/music/cc.mp3" },
+    { title: "No Broke Boys", artist: "Disco Lines", src: "/music/nbb.mp3" },
 ];
 
-// === Helper Components ===
+// === Helpers ===
 function SectionHeader({ children }) {
     return (
         <div className="flex items-center gap-2 text-slate-200 mt-5 mb-2">
@@ -158,10 +138,7 @@ function Collapsible({ open, children }) {
         setMaxH(open ? ref.current.scrollHeight + buffer : 0);
     };
 
-    useEffect(() => {
-        measure();
-    }, [open, children]);
-
+    useEffect(() => { measure(); }, [open, children]);
     useEffect(() => {
         const onR = () => open && measure();
         window.addEventListener("resize", onR);
@@ -174,9 +151,7 @@ function Collapsible({ open, children }) {
             className="transition-[max-height] duration-300 ease-in-out overflow-hidden"
             aria-hidden={!open}
         >
-            <div ref={ref} className="pt-1 pb-3">
-                {children}
-            </div>
+            <div ref={ref} className="pt-1 pb-3">{children}</div>
         </div>
     );
 }
@@ -210,14 +185,11 @@ function Row({ idx, title, org, range, type, onClick, expanded, hideRange = fals
 function Bullets({ items }) {
     return (
         <ul className="mt-2 ml-10 mr-3 list-disc text-slate-300 text-sm space-y-1">
-            {items.map((b, i) => (
-                <li key={i}>{b}</li>
-            ))}
+            {items.map((b, i) => <li key={i}>{b}</li>)}
         </ul>
     );
 }
 
-// === UI Components ===
 function TopHeader({ onResume }) {
     return (
         <header className="sticky top-0 z-30 bg-[#121212]/80 backdrop-blur-md border-b border-[#2a2a2a]">
@@ -298,7 +270,7 @@ function ResumeOverlay({ open, onClose, src }) {
     );
 }
 
-// NEW: Helper function to format time from seconds to MM:SS
+// Time format helper
 const formatTime = (secs) => {
     const minutes = Math.floor(secs / 60);
     const seconds = Math.floor(secs % 60);
@@ -316,7 +288,6 @@ function CoverArt({ src, size = 48, alt = "Album cover" }) {
             />
         );
     }
-
     // Default Apple-like placeholder
     return (
         <div
@@ -348,21 +319,24 @@ function CoverArt({ src, size = 48, alt = "Album cover" }) {
     );
 }
 
-
 function PlayerBar({
                        isPlaying,
                        shuffle,
+                       repeat,
                        volume,
                        song,
-                       trackProgress, // NEW: Receive track progress
+                       trackProgress,
                        onTogglePlaying,
                        onToggleShuffle,
+                       onToggleRepeat,
                        onNext,
                        onPrev,
                        onVolumeChange,
-                       onSeek, // NEW: Receive seek handler
+                       onSeek,
                    }) {
-    const pct = trackProgress.duration > 0 ? (trackProgress.currentTime / trackProgress.duration) * 100 : 0;
+    const pct = trackProgress.duration > 0
+        ? (trackProgress.currentTime / trackProgress.duration) * 100
+        : 0;
 
     return (
         <div className="fixed left-0 right-0 bottom-0 z-40 bg-[#181818]/95 border-t border-[#2a2a2a]">
@@ -380,31 +354,60 @@ function PlayerBar({
                 <div className="flex-1 flex flex-col items-center gap-2">
                     <div className="flex items-center gap-3">
                         <button
-                            className={`p-2 rounded-full transition ${shuffle ? "text-emerald-400" : "text-slate-400 hover:text-slate-100"}`}
+                            className={`p-2 rounded-full transition-colors duration-200 ${
+                                shuffle ? "text-emerald-400" : "text-slate-400 hover:text-slate-100"
+                            }`}
                             onClick={onToggleShuffle}
                             aria-label="Shuffle"
                             title="Shuffle"
                         >
                             <Shuffle size={18} />
                         </button>
+
                         <button onClick={onPrev} className="p-2 text-slate-400 hover:text-slate-100 rounded" aria-label="Previous">
                             <SkipBack size={18} />
                         </button>
+
                         <button
-                            className="p-3 rounded-full bg-white text-slate-900 hover:bg-slate-200 transition-transform hover:scale-105"
+                            className={`p-3 rounded-full transition-colors duration-200 ease-out hover:scale-105 transition-transform ${
+                                isPlaying
+                                    ? "bg-emerald-500 text-slate-900 hover:bg-emerald-400"
+                                    : "bg-white text-slate-900 hover:bg-slate-200"
+                            }`}
                             onClick={onTogglePlaying}
                             aria-label={isPlaying ? "Pause" : "Play"}
                         >
                             {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
                         </button>
+
                         <button onClick={onNext} className="p-2 text-slate-400 hover:text-slate-100 rounded" aria-label="Next">
                             <SkipForward size={18} />
                         </button>
-                        {/* Placeholder for repeat button */}
-                        <button className="p-2 text-slate-400 hover:text-slate-100" aria-label="Repeat">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg>
+
+                        <button
+                            onClick={onToggleRepeat}
+                            aria-label={repeat ? "Repeat: on" : "Repeat: off"}
+                            title={repeat ? "Repeat current track (on)" : "Repeat current track (off)"}
+                            className={`relative p-2 rounded-full transition-colors duration-200 ${
+                                repeat ? "text-emerald-400" : "text-slate-400 hover:text-slate-100"
+                            }`}
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                 strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="m17 2 4 4-4 4"/>
+                                <path d="M3 11v-1a4 4 0 0 1 4-4h14"/>
+                                <path d="m7 22-4-4 4-4"/>
+                                <path d="M21 13v1a4 4 0 0 1-4 4H3"/>
+                            </svg>
+                            {repeat && (
+                                <span className="absolute -top-1 -right-1 text-[10px] leading-none px-1.5 py-[2px] rounded-full bg-emerald-500 text-black">
+                  1
+                </span>
+                            )}
                         </button>
                     </div>
+
                     {/* Progress Bar */}
                     <div className="w-full flex items-center gap-3">
                         <div className="w-10 text-xs tabular-nums text-slate-400">
@@ -412,7 +415,7 @@ function PlayerBar({
                         </div>
                         <div
                             className="h-1 flex-1 bg-slate-700 rounded-full group cursor-pointer"
-                            onClick={onSeek} // NEW: Click to seek
+                            onClick={onSeek}
                         >
                             <div className="h-full bg-white group-hover:bg-emerald-400 rounded-full" style={{ width: `${pct}%` }} />
                         </div>
@@ -422,7 +425,7 @@ function PlayerBar({
                     </div>
                 </div>
 
-                {/* Volume Controls */}
+                {/* Volume */}
                 <div className="w-48 hidden md:flex items-center gap-2 justify-end">
                     <Volume2 size={18} className="text-slate-200" />
                     <div className="w-28 h-1 bg-slate-700 rounded-full overflow-hidden relative group">
@@ -431,11 +434,10 @@ function PlayerBar({
                             min={0}
                             max={1}
                             step={0.01}
-                            value={volume}
                             onChange={onVolumeChange}
                             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                         />
-                        <div className="h-full bg-white group-hover:bg-emerald-400" style={{ width: `${volume * 100}%` }} />
+                        <div className="h-full bg-white group-hover:bg-emerald-400 pointer-events-none" />
                     </div>
                 </div>
             </div>
@@ -449,14 +451,20 @@ function BelowControls({ playing, shuffle, onTogglePlaying, onToggleShuffle }) {
             <button
                 aria-label={playing ? "Pause" : "Play"}
                 onClick={onTogglePlaying}
-                className="p-3 rounded-full bg-emerald-500 text-slate-900 hover:bg-emerald-400"
+                className={`p-3 rounded-full transition-colors duration-200 ease-out hover:scale-105 transition-transform ${
+                    playing
+                        ? "bg-emerald-500 text-slate-900 hover:bg-emerald-400"
+                        : "bg-white text-slate-900 hover:bg-slate-200"
+                }`}
             >
                 {playing ? <Pause size={18} /> : <Play size={18} />}
             </button>
             <button
                 aria-label="Shuffle"
                 onClick={onToggleShuffle}
-                className={`p-3 rounded-full border transition ${shuffle ? "bg-emerald-500 text-slate-900 border-emerald-500" : "bg-white/10 text-slate-100 border-white/10 hover:bg-white/15"}`}
+                className={`p-3 rounded-full border transition-colors duration-200 ${
+                    shuffle ? "bg-emerald-500 text-slate-900 border-emerald-500" : "bg-white/10 text-slate-100 border-white/10 hover:bg-white/15"
+                }`}
                 title="Shuffle"
             >
                 <Shuffle size={18} />
@@ -465,7 +473,7 @@ function BelowControls({ playing, shuffle, onTogglePlaying, onToggleShuffle }) {
     );
 }
 
-// === Main App Component ===
+// === Main App ===
 export default function App() {
     const [resumeOpen, setResumeOpen] = useState(false);
     const [expOpen, setExpOpen] = useState(null);
@@ -476,70 +484,77 @@ export default function App() {
     const [currentSongIndex, setCurrentSongIndex] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
     const [shuffle, setShuffle] = useState(false);
+    const [repeat, setRepeat] = useState(false);
     const [volume, setVolume] = useState(0.7);
-    // NEW: State for tracking song progress
     const [trackProgress, setTrackProgress] = useState({ currentTime: 0, duration: 0 });
 
     const audioRef = useRef(null);
 
-    // Music Control Functions
-    const togglePlayPause = () => {
-        setIsPlaying(!isPlaying);
-    };
-
-    const toggleShuffle = () => {
-        setShuffle(!shuffle);
-    };
+    const togglePlayPause = () => setIsPlaying((p) => !p);
+    const toggleShuffle = () => setShuffle((s) => !s);
 
     const playNextSong = useCallback(() => {
-        let nextIndex;
-        if (shuffle) {
-            do {
-                nextIndex = Math.floor(Math.random() * songs.length);
-            } while (songs.length > 1 && nextIndex === currentSongIndex);
-        } else {
-            nextIndex = (currentSongIndex + 1) % songs.length;
-        }
-        setCurrentSongIndex(nextIndex);
-    }, [currentSongIndex, shuffle, songs.length]);
+        setCurrentSongIndex((idx) => {
+            if (shuffle) {
+                let next = idx;
+                if (songs.length > 1) {
+                    while (next === idx) next = Math.floor(Math.random() * songs.length);
+                }
+                return next;
+            }
+            return (idx + 1) % songs.length;
+        });
+    }, [shuffle, songs.length]);
 
     const playPrevSong = () => {
-        const prevIndex = (currentSongIndex - 1 + songs.length) % songs.length;
-        setCurrentSongIndex(prevIndex);
+        setCurrentSongIndex((idx) => (idx - 1 + songs.length) % songs.length);
     };
 
     const handleVolumeChange = (e) => {
-        const newVolume = e.target.value;
+        const newVolume = Number(e.target.value);
         setVolume(newVolume);
-        if (audioRef.current) {
-            audioRef.current.volume = newVolume;
-        }
+        if (audioRef.current) audioRef.current.volume = newVolume;
     };
 
-    // NEW: Function to handle clicking on the progress bar
     const handleSeek = (e) => {
-        if (audioRef.current) {
-            const seekTime = (e.nativeEvent.offsetX / e.currentTarget.offsetWidth) * trackProgress.duration;
-            audioRef.current.currentTime = seekTime;
+        if (!audioRef.current || trackProgress.duration === 0) return;
+        const rect = e.currentTarget.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const ratio = Math.min(Math.max(clickX / rect.width, 0), 1);
+        audioRef.current.currentTime = ratio * trackProgress.duration;
+    };
+
+    const handleEnded = () => {
+        if (!audioRef.current) return;
+        if (repeat) {
+            audioRef.current.currentTime = 0;
+            audioRef.current.play().catch(() => {});
+        } else {
+            playNextSong();
         }
     };
 
-    // Effect to handle the actual play/pause logic
+    // Sync play/pause
     useEffect(() => {
+        if (!audioRef.current) return;
         if (isPlaying) {
-            audioRef.current.play().catch(error => console.error("Error playing audio:", error));
+            audioRef.current.play().catch((err) => {
+                console.error("Error playing audio:", err);
+                setIsPlaying(false);
+            });
         } else {
             audioRef.current.pause();
         }
     }, [isPlaying]);
 
-    // Effect to play a new song when the index changes
+    // On song change, reset time and auto-play if currently playing
     useEffect(() => {
-        audioRef.current.currentTime = 0; // Reset time when song changes
+        if (!audioRef.current) return;
+        audioRef.current.currentTime = 0;
         if (isPlaying) {
-            audioRef.current.play().catch(error => console.error("Error playing audio:", error));
+            audioRef.current.play().catch((err) => console.error("Error playing audio:", err));
         }
-    }, [currentSongIndex]);
+    }, [currentSongIndex, isPlaying]);
 
     const year = useMemo(() => new Date().getFullYear(), []);
     const resumeSrc = "/resume.pdf";
@@ -549,10 +564,13 @@ export default function App() {
             <audio
                 ref={audioRef}
                 src={songs[currentSongIndex].src}
-                onEnded={playNextSong}
-                // NEW: Event listeners to update progress
-                onTimeUpdate={(e) => setTrackProgress({ ...trackProgress, currentTime: e.target.currentTime })}
-                onLoadedMetadata={(e) => setTrackProgress({ ...trackProgress, duration: e.target.duration })}
+                onEnded={handleEnded}
+                onTimeUpdate={(e) =>
+                    setTrackProgress((tp) => ({ ...tp, currentTime: e.target.currentTime }))
+                }
+                onLoadedMetadata={(e) =>
+                    setTrackProgress((tp) => ({ ...tp, duration: e.target.duration }))
+                }
             />
 
             <TopHeader onResume={() => setResumeOpen(true)} />
@@ -677,16 +695,19 @@ export default function App() {
             <PlayerBar
                 isPlaying={isPlaying}
                 shuffle={shuffle}
+                repeat={repeat}
                 volume={volume}
                 song={songs[currentSongIndex]}
                 trackProgress={trackProgress}
                 onTogglePlaying={togglePlayPause}
                 onToggleShuffle={toggleShuffle}
+                onToggleRepeat={() => setRepeat((r) => !r)}
                 onNext={playNextSong}
                 onPrev={playPrevSong}
                 onVolumeChange={handleVolumeChange}
                 onSeek={handleSeek}
             />
+
             <ResumeOverlay open={resumeOpen} onClose={() => setResumeOpen(false)} src={resumeSrc} />
         </div>
     );
