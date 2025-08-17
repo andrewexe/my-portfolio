@@ -106,7 +106,7 @@ const PROJECTS = [
 ];
 
 const SKILLS = [
-    "C++","Java","Python","JavaScript","TypeScript","SQL","Spring Boot","React","Node.js","Docker","PostgreSQL","AWS","GCP","Azure","Linux","Git"
+    "C++","Java","Python","JavaScript","TypeScript","SQL","Spring Boot","React","Node.js","Docker","PostgreSQL","AWS","GCP","Azure","Git"
 ];
 
 const SONGS = [
