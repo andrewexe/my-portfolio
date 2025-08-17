@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect, useRef } from "react";
+import React, { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import {
     Home,
     Mail,
@@ -33,7 +33,6 @@ const CONTACT = [
     { label: "LinkedIn", value: "linkedin.com/in/andrew-huang-uf" },
 ];
 
-// Experience details
 const EXPERIENCE = [
     {
         title: "Software Development Engineering Intern",
@@ -71,7 +70,6 @@ const EXPERIENCE = [
     },
 ];
 
-// Projects details (no Year column shown in UI)
 const PROJECTS = [
     {
         title: "HINTerview",
@@ -112,7 +110,35 @@ const SKILLS = [
     "C++","Java","Python","JavaScript","TypeScript","SQL","Spring Boot","React","Node.js","Docker","PostgreSQL","AWS","GCP","Azure","Linux","Git"
 ];
 
-// === Helpers ===
+const SONGS = [
+    {
+        title: "Back To U",
+        artist: "Slander",
+        src: "/music/slander.mp3",
+    },
+    {
+        title: "Right Now",
+        artist: "PARTYNXTDOOR",
+        src: "/music/rn.mp3",
+    },
+    {
+        title: "The Morning",
+        artist: "The Weeknd",
+        src: "/music/morning.mp3",
+    },
+    {
+        title: "Champagne Coast",
+        artist: "Blood Orange",
+        src: "/music/cc.mp3",
+    },
+    {
+        title: "No Broke Boys",
+        artist: "Disco Lines",
+        src: "/music/nbb.mp3",
+    },
+];
+
+// === Helper Components ===
 function SectionHeader({ children }) {
     return (
         <div className="flex items-center gap-2 text-slate-200 mt-5 mb-2">
@@ -122,15 +148,13 @@ function SectionHeader({ children }) {
     );
 }
 
-// Collapsible with smooth max-height animation + buffer to avoid clipping
 function Collapsible({ open, children }) {
     const ref = useRef(null);
     const [maxH, setMaxH] = useState(0);
 
     const measure = () => {
         if (!ref.current) return;
-        // add buffer to prevent last line clipping during transition
-        const buffer = 24; // px
+        const buffer = 24;
         setMaxH(open ? ref.current.scrollHeight + buffer : 0);
     };
 
@@ -157,20 +181,14 @@ function Collapsible({ open, children }) {
     );
 }
 
-// Row with chevron (keeps # column)
 function Row({ idx, title, org, range, type, onClick, expanded, hideRange = false }) {
     const titleSpan = hideRange ? "col-span-9" : "col-span-6";
     return (
         <button onClick={onClick} aria-expanded={expanded} className="w-full text-left">
             <div className="grid grid-cols-12 items-center py-3 px-3 hover:bg-white/5 rounded-lg">
                 <div className="col-span-1 text-sm text-slate-400">{idx}</div>
-
                 <div className={`${titleSpan} flex items-center gap-2`}>
-          <span
-              className={`transition-transform duration-200 ease-out ${
-                  expanded ? "rotate-180" : "rotate-0"
-              }`}
-          >
+          <span className={`transition-transform duration-200 ease-out ${expanded ? "rotate-180" : "rotate-0"}`}>
             <ChevronDown size={16} className="text-slate-400" />
           </span>
                     <div>
@@ -178,9 +196,7 @@ function Row({ idx, title, org, range, type, onClick, expanded, hideRange = fals
                         <div className="text-sm text-slate-400">{org}</div>
                     </div>
                 </div>
-
                 {!hideRange && <div className="col-span-3 text-sm text-slate-300">{range}</div>}
-
                 <div className="col-span-2">
           <span className="text-xs rounded-full px-2 py-1 border border-[#2a2a2a] text-slate-300">
             {type}
@@ -191,7 +207,6 @@ function Row({ idx, title, org, range, type, onClick, expanded, hideRange = fals
     );
 }
 
-// Bullets
 function Bullets({ items }) {
     return (
         <ul className="mt-2 ml-10 mr-3 list-disc text-slate-300 text-sm space-y-1">
@@ -202,12 +217,11 @@ function Bullets({ items }) {
     );
 }
 
-// === Sticky Top Header with centered, roomier nav ===
+// === UI Components ===
 function TopHeader({ onResume }) {
     return (
         <header className="sticky top-0 z-30 bg-[#121212]/80 backdrop-blur-md border-b border-[#2a2a2a]">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 grid grid-cols-3 items-center">
-                {/* Left: avatar + name */}
                 <div className="flex items-center gap-3">
                     <img src={META.avatar} alt="avatar" className="w-9 h-9 rounded-full object-cover" />
                     <div className="hidden sm:block">
@@ -215,27 +229,18 @@ function TopHeader({ onResume }) {
                         <div className="text-[11px] text-slate-400">{META.title}</div>
                     </div>
                 </div>
-
-                {/* Center: nav icons */}
-                {/* Center: nav icons */}
                 <nav className="flex items-center justify-center">
                     <ul className="flex items-center gap-6 sm:gap-8 md:gap-10 lg:gap-12">
                         {[
-                            // Home button still links to the top of the page
                             { href: "#top", Icon: Home, label: "Home" },
-                            // Updated to your actual email
                             { href: "mailto:andrew03huang@gmail.com", Icon: Mail, label: "Email" },
-                            // Updated to your LinkedIn URL
                             { href: "https://linkedin.com/in/andrew-huang-uf", Icon: Linkedin, label: "LinkedIn" },
-                            // Updated to your GitHub URL
                             { href: "https://github.com/andrewexe", Icon: Github, label: "GitHub" },
                         ].map(({ href, Icon, label }) => (
                             <li key={href}>
                                 <a
                                     href={href}
-                                    // This makes the link open in a new tab
-                                    target="_blank"
-                                    // This is important for security when using target="_blank"
+                                    target={href.startsWith("http") ? "_blank" : "_self"}
                                     rel="noopener noreferrer"
                                     className="inline-flex items-center justify-center rounded-full p-3 sm:p-4 hover:bg-white/15 transition-transform duration-150 hover:scale-110"
                                     title={label}
@@ -247,8 +252,6 @@ function TopHeader({ onResume }) {
                         ))}
                     </ul>
                 </nav>
-
-                {/* Right: résumé button */}
                 <div className="flex justify-end">
                     <button
                         onClick={onResume}
@@ -262,7 +265,6 @@ function TopHeader({ onResume }) {
     );
 }
 
-// === Resume overlay ===
 function ResumeOverlay({ open, onClose, src }) {
     const [scale, setScale] = useState(1);
     useEffect(() => {
@@ -296,74 +298,144 @@ function ResumeOverlay({ open, onClose, src }) {
     );
 }
 
-// === Bottom player (green Play; Shuffle synced) + Volume slider (UI only) ===
-function PlayerBar({ playing, shuffle, onTogglePlaying, onToggleShuffle }) {
-    const [pos, setPos] = useState(3);
-    const duration = 236;
+// NEW: Helper function to format time from seconds to MM:SS
+const formatTime = (secs) => {
+    const minutes = Math.floor(secs / 60);
+    const seconds = Math.floor(secs % 60);
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+};
 
-    useEffect(() => {
-        if (!playing) return;
-        const t = setInterval(() => setPos((p) => Math.min(duration, p + 1)), 1000);
-        return () => clearInterval(t);
-    }, [playing]);
+function CoverArt({ src, size = 48, alt = "Album cover" }) {
+    if (src) {
+        return (
+            <img
+                src={src}
+                alt={alt}
+                className="rounded-md object-cover"
+                style={{ width: size, height: size }}
+            />
+        );
+    }
 
-    const pct = (pos / duration) * 100;
+    // Default Apple-like placeholder
+    return (
+        <div
+            aria-label={alt}
+            className="rounded-md grid place-items-center"
+            style={{
+                width: size,
+                height: size,
+                background:
+                    "linear-gradient(135deg, rgb(99,102,241) 0%, rgb(147,51,234) 50%, rgb(236,72,153) 100%)",
+            }}
+        >
+            <svg
+                width={Math.floor(size * 0.55)}
+                height={Math.floor(size * 0.55)}
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="white"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+            >
+                <path d="M9 18V5l12-2v13" />
+                <circle cx="6" cy="18" r="3" />
+                <circle cx="18" cy="16" r="3" />
+            </svg>
+        </div>
+    );
+}
+
+
+function PlayerBar({
+                       isPlaying,
+                       shuffle,
+                       volume,
+                       song,
+                       trackProgress, // NEW: Receive track progress
+                       onTogglePlaying,
+                       onToggleShuffle,
+                       onNext,
+                       onPrev,
+                       onVolumeChange,
+                       onSeek, // NEW: Receive seek handler
+                   }) {
+    const pct = trackProgress.duration > 0 ? (trackProgress.currentTime / trackProgress.duration) * 100 : 0;
 
     return (
         <div className="fixed left-0 right-0 bottom-0 z-40 bg-[#181818]/95 border-t border-[#2a2a2a]">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-4">
-                <div className="hidden sm:flex items-center gap-3">
-                    <button
-                        className={`p-2 rounded-full border transition ${
-                            shuffle
-                                ? "bg-emerald-500 text-slate-900 border-emerald-500"
-                                : "bg-white/10 text-slate-100 border-white/10 hover:bg-white/15"
-                        }`}
-                        onClick={onToggleShuffle}
-                        aria-label="Shuffle"
-                        title="Shuffle"
-                    >
-                        <Shuffle size={18} />
-                    </button>
-                    <button className="p-2 hover:bg-white/10 rounded" aria-label="Previous">
-                        <SkipBack size={18} />
-                    </button>
-                    <button
-                        className="p-2 rounded-full bg-emerald-500 text-slate-900 hover:bg-emerald-400"
-                        onClick={onTogglePlaying}
-                        aria-label={playing ? "Pause" : "Play"}
-                    >
-                        {playing ? <Pause size={16} /> : <Play size={16} />}
-                    </button>
-                    <button className="p-2 hover:bg-white/10 rounded" aria-label="Next">
-                        <SkipForward size={18} />
-                    </button>
-                </div>
-
-                <div className="flex-1 flex items-center gap-3">
-                    <div className="w-10 text-xs tabular-nums text-slate-400">
-                        {Math.floor(pos / 60)}:{(pos % 60).toString().padStart(2, "0")}
-                    </div>
-                    <div className="h-1 flex-1 bg-slate-700 rounded-full overflow-hidden">
-                        <div className="h-full bg-emerald-400" style={{ width: `${pct}%` }} />
-                    </div>
-                    <div className="w-10 text-xs tabular-nums text-slate-400">
-                        {Math.floor(duration / 60)}:{(duration % 60).toString().padStart(2, "0")}
+                {/* Current song info */}
+                <div className="w-48 hidden sm:flex items-center gap-3">
+                    <CoverArt src={song.cover} size={48} alt={`${song.title} cover`} />
+                    <div>
+                        <div className="font-semibold text-sm text-slate-100">{song.title}</div>
+                        <div className="text-xs text-slate-400">{song.artist}</div>
                     </div>
                 </div>
 
-                {/* Volume slider (UI only) */}
-                <div className="hidden md:flex items-center gap-2">
+                {/* Main Controls */}
+                <div className="flex-1 flex flex-col items-center gap-2">
+                    <div className="flex items-center gap-3">
+                        <button
+                            className={`p-2 rounded-full transition ${shuffle ? "text-emerald-400" : "text-slate-400 hover:text-slate-100"}`}
+                            onClick={onToggleShuffle}
+                            aria-label="Shuffle"
+                            title="Shuffle"
+                        >
+                            <Shuffle size={18} />
+                        </button>
+                        <button onClick={onPrev} className="p-2 text-slate-400 hover:text-slate-100 rounded" aria-label="Previous">
+                            <SkipBack size={18} />
+                        </button>
+                        <button
+                            className="p-3 rounded-full bg-white text-slate-900 hover:bg-slate-200 transition-transform hover:scale-105"
+                            onClick={onTogglePlaying}
+                            aria-label={isPlaying ? "Pause" : "Play"}
+                        >
+                            {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
+                        </button>
+                        <button onClick={onNext} className="p-2 text-slate-400 hover:text-slate-100 rounded" aria-label="Next">
+                            <SkipForward size={18} />
+                        </button>
+                        {/* Placeholder for repeat button */}
+                        <button className="p-2 text-slate-400 hover:text-slate-100" aria-label="Repeat">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg>
+                        </button>
+                    </div>
+                    {/* Progress Bar */}
+                    <div className="w-full flex items-center gap-3">
+                        <div className="w-10 text-xs tabular-nums text-slate-400">
+                            {formatTime(trackProgress.currentTime)}
+                        </div>
+                        <div
+                            className="h-1 flex-1 bg-slate-700 rounded-full group cursor-pointer"
+                            onClick={onSeek} // NEW: Click to seek
+                        >
+                            <div className="h-full bg-white group-hover:bg-emerald-400 rounded-full" style={{ width: `${pct}%` }} />
+                        </div>
+                        <div className="w-10 text-xs tabular-nums text-slate-400">
+                            {formatTime(trackProgress.duration)}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Volume Controls */}
+                <div className="w-48 hidden md:flex items-center gap-2 justify-end">
                     <Volume2 size={18} className="text-slate-200" />
-                    <div className="w-28 h-1 bg-slate-700 rounded-full overflow-hidden relative">
+                    <div className="w-28 h-1 bg-slate-700 rounded-full overflow-hidden relative group">
                         <input
                             type="range"
                             min={0}
-                            max={100}
-                            defaultValue={70}
-                            className="absolute inset-0 w-full opacity-0 cursor-pointer"
+                            max={1}
+                            step={0.01}
+                            value={volume}
+                            onChange={onVolumeChange}
+                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                         />
-                        <div className="h-full bg-slate-200" style={{ width: `70%` }} />
+                        <div className="h-full bg-white group-hover:bg-emerald-400" style={{ width: `${volume * 100}%` }} />
                     </div>
                 </div>
             </div>
@@ -371,7 +443,6 @@ function PlayerBar({ playing, shuffle, onTogglePlaying, onToggleShuffle }) {
     );
 }
 
-// Icon-only controls OUTSIDE the portfolio box
 function BelowControls({ playing, shuffle, onTogglePlaying, onToggleShuffle }) {
     return (
         <div className="mt-4 flex items-center gap-3">
@@ -385,11 +456,7 @@ function BelowControls({ playing, shuffle, onTogglePlaying, onToggleShuffle }) {
             <button
                 aria-label="Shuffle"
                 onClick={onToggleShuffle}
-                className={`p-3 rounded-full border transition ${
-                    shuffle
-                        ? "bg-emerald-500 text-slate-900 border-emerald-500"
-                        : "bg-white/10 text-slate-100 border-white/10 hover:bg-white/15"
-                }`}
+                className={`p-3 rounded-full border transition ${shuffle ? "bg-emerald-500 text-slate-900 border-emerald-500" : "bg-white/10 text-slate-100 border-white/10 hover:bg-white/15"}`}
                 title="Shuffle"
             >
                 <Shuffle size={18} />
@@ -398,24 +465,100 @@ function BelowControls({ playing, shuffle, onTogglePlaying, onToggleShuffle }) {
     );
 }
 
+// === Main App Component ===
 export default function App() {
     const [resumeOpen, setResumeOpen] = useState(false);
-    const [playing, setPlaying] = useState(true); // shared
-    const [shuffle, setShuffle] = useState(false); // shared
-    const [expOpen, setExpOpen] = useState(null); // expanded experience index
-    const [projOpen, setProjOpen] = useState(null); // expanded project index
+    const [expOpen, setExpOpen] = useState(null);
+    const [projOpen, setProjOpen] = useState(null);
+
+    // Music State
+    const [songs] = useState(SONGS);
+    const [currentSongIndex, setCurrentSongIndex] = useState(0);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [shuffle, setShuffle] = useState(false);
+    const [volume, setVolume] = useState(0.7);
+    // NEW: State for tracking song progress
+    const [trackProgress, setTrackProgress] = useState({ currentTime: 0, duration: 0 });
+
+    const audioRef = useRef(null);
+
+    // Music Control Functions
+    const togglePlayPause = () => {
+        setIsPlaying(!isPlaying);
+    };
+
+    const toggleShuffle = () => {
+        setShuffle(!shuffle);
+    };
+
+    const playNextSong = useCallback(() => {
+        let nextIndex;
+        if (shuffle) {
+            do {
+                nextIndex = Math.floor(Math.random() * songs.length);
+            } while (songs.length > 1 && nextIndex === currentSongIndex);
+        } else {
+            nextIndex = (currentSongIndex + 1) % songs.length;
+        }
+        setCurrentSongIndex(nextIndex);
+    }, [currentSongIndex, shuffle, songs.length]);
+
+    const playPrevSong = () => {
+        const prevIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+        setCurrentSongIndex(prevIndex);
+    };
+
+    const handleVolumeChange = (e) => {
+        const newVolume = e.target.value;
+        setVolume(newVolume);
+        if (audioRef.current) {
+            audioRef.current.volume = newVolume;
+        }
+    };
+
+    // NEW: Function to handle clicking on the progress bar
+    const handleSeek = (e) => {
+        if (audioRef.current) {
+            const seekTime = (e.nativeEvent.offsetX / e.currentTarget.offsetWidth) * trackProgress.duration;
+            audioRef.current.currentTime = seekTime;
+        }
+    };
+
+    // Effect to handle the actual play/pause logic
+    useEffect(() => {
+        if (isPlaying) {
+            audioRef.current.play().catch(error => console.error("Error playing audio:", error));
+        } else {
+            audioRef.current.pause();
+        }
+    }, [isPlaying]);
+
+    // Effect to play a new song when the index changes
+    useEffect(() => {
+        audioRef.current.currentTime = 0; // Reset time when song changes
+        if (isPlaying) {
+            audioRef.current.play().catch(error => console.error("Error playing audio:", error));
+        }
+    }, [currentSongIndex]);
 
     const year = useMemo(() => new Date().getFullYear(), []);
-    const resumeSrc = "/resume.pdf"; // put your PDF in /public
+    const resumeSrc = "/resume.pdf";
 
     return (
         <div id="top" className="min-h-screen bg-[#121212] text-slate-100">
+            <audio
+                ref={audioRef}
+                src={songs[currentSongIndex].src}
+                onEnded={playNextSong}
+                // NEW: Event listeners to update progress
+                onTimeUpdate={(e) => setTrackProgress({ ...trackProgress, currentTime: e.target.currentTime })}
+                onLoadedMetadata={(e) => setTrackProgress({ ...trackProgress, duration: e.target.duration })}
+            />
+
             <TopHeader onResume={() => setResumeOpen(true)} />
 
             <main className="max-w-7xl mx-auto px-6 pt-3 pb-28">
-                {/* Header block */}
                 <section className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                    {/* Primary profile card */}
                     <div className="col-span-2 rounded-2xl border border-[#2a2a2a] bg-gradient-to-b from-[#1f1f1f] to-[#121212] p-5">
                         <div className="flex items-center gap-5">
                             <img src={META.avatar} alt="avatar" className="w-28 h-28 rounded-full object-cover" />
@@ -431,8 +574,6 @@ export default function App() {
                             </div>
                         </div>
                     </div>
-
-                    {/* About panel */}
                     <aside id="about" className="rounded-2xl border border-[#2a2a2a] bg-[#181818]/80 p-5">
                         <h3 className="text-lg font-bold mb-2">About me</h3>
                         <p className="text-slate-300 text-sm leading-relaxed">
@@ -442,17 +583,15 @@ export default function App() {
                     </aside>
                 </section>
 
-                {/* Controls row OUTSIDE the portfolio box */}
                 <section className="mt-3">
                     <BelowControls
-                        playing={playing}
+                        playing={isPlaying}
                         shuffle={shuffle}
-                        onTogglePlaying={() => setPlaying((p) => !p)}
-                        onToggleShuffle={() => setShuffle((s) => !s)}
+                        onTogglePlaying={togglePlayPause}
+                        onToggleShuffle={toggleShuffle}
                     />
                 </section>
 
-                {/* Experience (animated dropdown) */}
                 <section className="mt-8">
                     <SectionHeader>Experience</SectionHeader>
                     <div className="rounded-2xl border border-[#2a2a2a] bg-[#181818]/70 p-2">
@@ -462,7 +601,6 @@ export default function App() {
                             <div className="col-span-3">Dates</div>
                             <div className="col-span-2">Type</div>
                         </div>
-
                         {EXPERIENCE.map((e, i) => (
                             <div key={i} className="rounded-lg">
                                 <Row
@@ -482,7 +620,6 @@ export default function App() {
                     </div>
                 </section>
 
-                {/* Projects (no Year col; animated dropdown) */}
                 <section id="projects" className="mt-8">
                     <SectionHeader>Projects</SectionHeader>
                     <div className="rounded-2xl border border-[#2a2a2a] bg-[#181818]/70 p-2">
@@ -491,7 +628,6 @@ export default function App() {
                             <div className="col-span-9">Title</div>
                             <div className="col-span-2">Type</div>
                         </div>
-
                         {PROJECTS.map((p, i) => (
                             <div key={i} className="rounded-lg">
                                 <Row
@@ -512,7 +648,6 @@ export default function App() {
                     </div>
                 </section>
 
-                {/* Skills + Contact */}
                 <section className="mt-8" id="contact">
                     <SectionHeader>Skills</SectionHeader>
                     <div className="flex flex-wrap gap-2">
@@ -522,7 +657,6 @@ export default function App() {
               </span>
                         ))}
                     </div>
-
                     <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
                         {CONTACT.map((c) => (
                             <div key={c.label} className="rounded-xl border border-[#2a2a2a] bg-[#181818]/80 p-4">
@@ -541,12 +675,19 @@ export default function App() {
             </footer>
 
             <PlayerBar
-                playing={playing}
+                isPlaying={isPlaying}
                 shuffle={shuffle}
-                onTogglePlaying={() => setPlaying((p) => !p)}
-                onToggleShuffle={() => setShuffle((s) => !s)}
+                volume={volume}
+                song={songs[currentSongIndex]}
+                trackProgress={trackProgress}
+                onTogglePlaying={togglePlayPause}
+                onToggleShuffle={toggleShuffle}
+                onNext={playNextSong}
+                onPrev={playPrevSong}
+                onVolumeChange={handleVolumeChange}
+                onSeek={handleSeek}
             />
-            <ResumeOverlay open={resumeOpen} onClose={() => setResumeOpen(false)} src="/resume.pdf" />
+            <ResumeOverlay open={resumeOpen} onClose={() => setResumeOpen(false)} src={resumeSrc} />
         </div>
     );
 }
