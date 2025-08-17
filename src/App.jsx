@@ -17,8 +17,7 @@ import {
 // === Data ===
 const META = {
     name: "Andrew Huang",
-    avatar:
-        "https://images.unsplash.com/photo-1502685104226-ee32379fefbe?q=80&w=400&auto=format&fit=crop",
+    avatar: "/headshot.jpeg",
     title: "Portfolio",
     school: "University of Florida",
     major: "Computer Science",
@@ -111,11 +110,11 @@ const SKILLS = [
 ];
 
 const SONGS = [
-    { title: "Back To U", artist: "Slander", src: "/music/slander.mp3" },
-    { title: "Right Now", artist: "PARTYNXTDOOR", src: "/music/rn.mp3" },
-    { title: "The Morning", artist: "The Weeknd", src: "/music/morning.mp3" },
-    { title: "Champagne Coast", artist: "Blood Orange", src: "/music/cc.mp3" },
-    { title: "No Broke Boys", artist: "Disco Lines", src: "/music/nbb.mp3" },
+    { title: "Back To U", artist: "Slander", src: "/music/slander.mp3", cover: "/covers/slander.jpg" },
+    { title: "Right Now", artist: "PARTYNXTDOOR", src: "/music/rn.mp3", cover: "/covers/rn.jpg" },
+    { title: "The Morning", artist: "The Weeknd", src: "/music/morning.mp3", cover: "/covers/morning.jpeg" },
+    { title: "Champagne Coast", artist: "Blood Orange", src: "/music/cc.mp3", cover: "/covers/cc.jpeg" },
+    { title: "No Broke Boys", artist: "Disco Lines", src: "/music/nbb.mp3", cover: "/covers/nbb.jpg" },
 ];
 
 // === Helpers ===
@@ -131,26 +130,19 @@ function SectionHeader({ children }) {
 function Collapsible({ open, children }) {
     const ref = useRef(null);
     const [maxH, setMaxH] = useState(0);
-
     const measure = () => {
         if (!ref.current) return;
         const buffer = 24;
         setMaxH(open ? ref.current.scrollHeight + buffer : 0);
     };
-
     useEffect(() => { measure(); }, [open, children]);
     useEffect(() => {
         const onR = () => open && measure();
         window.addEventListener("resize", onR);
         return () => window.removeEventListener("resize", onR);
     }, [open]);
-
     return (
-        <div
-            style={{ maxHeight: maxH }}
-            className="transition-[max-height] duration-300 ease-in-out overflow-hidden"
-            aria-hidden={!open}
-        >
+        <div style={{ maxHeight: maxH }} className="transition-[max-height] duration-300 ease-in-out overflow-hidden" aria-hidden={!open}>
             <div ref={ref} className="pt-1 pb-3">{children}</div>
         </div>
     );
@@ -270,7 +262,7 @@ function ResumeOverlay({ open, onClose, src }) {
     );
 }
 
-// Time format helper
+// Time format
 const formatTime = (secs) => {
     const minutes = Math.floor(secs / 60);
     const seconds = Math.floor(secs % 60);
@@ -288,7 +280,6 @@ function CoverArt({ src, size = 48, alt = "Album cover" }) {
             />
         );
     }
-    // Default Apple-like placeholder
     return (
         <div
             aria-label={alt}
@@ -319,6 +310,7 @@ function CoverArt({ src, size = 48, alt = "Album cover" }) {
     );
 }
 
+// === PlayerBar (bottom) — play button ALWAYS white ===
 function PlayerBar({
                        isPlaying,
                        shuffle,
@@ -341,7 +333,7 @@ function PlayerBar({
     return (
         <div className="fixed left-0 right-0 bottom-0 z-40 bg-[#181818]/95 border-t border-[#2a2a2a]">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-4">
-                {/* Current song info */}
+                {/* Current song */}
                 <div className="w-48 hidden sm:flex items-center gap-3">
                     <CoverArt src={song.cover} size={48} alt={`${song.title} cover`} />
                     <div>
@@ -350,7 +342,7 @@ function PlayerBar({
                     </div>
                 </div>
 
-                {/* Main Controls */}
+                {/* Main controls */}
                 <div className="flex-1 flex flex-col items-center gap-2">
                     <div className="flex items-center gap-3">
                         <button
@@ -368,12 +360,9 @@ function PlayerBar({
                             <SkipBack size={18} />
                         </button>
 
+                        {/* ALWAYS white */}
                         <button
-                            className={`p-3 rounded-full transition-colors duration-200 ease-out hover:scale-105 transition-transform ${
-                                isPlaying
-                                    ? "bg-emerald-500 text-slate-900 hover:bg-emerald-400"
-                                    : "bg-white text-slate-900 hover:bg-slate-200"
-                            }`}
+                            className="p-3 rounded-full bg-white text-slate-900 hover:bg-slate-200 transition-colors duration-200 ease-out hover:scale-105 transition-transform"
                             onClick={onTogglePlaying}
                             aria-label={isPlaying ? "Pause" : "Play"}
                         >
@@ -384,6 +373,7 @@ function PlayerBar({
                             <SkipForward size={18} />
                         </button>
 
+                        {/* Repeat */}
                         <button
                             onClick={onToggleRepeat}
                             aria-label={repeat ? "Repeat: on" : "Repeat: off"}
@@ -401,22 +391,17 @@ function PlayerBar({
                                 <path d="M21 13v1a4 4 0 0 1-4 4H3"/>
                             </svg>
                             {repeat && (
-                                <span className="absolute -top-1 -right-1 text-[10px] leading-none px-1.5 py-[2px] rounded-full bg-emerald-500 text-black">
-                  1
-                </span>
+                                <span className="absolute -top-1 -right-1 text-[10px] leading-none px-1.5 py-[2px] rounded-full bg-emerald-500 text-black">1</span>
                             )}
                         </button>
                     </div>
 
-                    {/* Progress Bar */}
+                    {/* Progress */}
                     <div className="w-full flex items-center gap-3">
                         <div className="w-10 text-xs tabular-nums text-slate-400">
                             {formatTime(trackProgress.currentTime)}
                         </div>
-                        <div
-                            className="h-1 flex-1 bg-slate-700 rounded-full group cursor-pointer"
-                            onClick={onSeek}
-                        >
+                        <div className="h-1 flex-1 bg-slate-700 rounded-full group cursor-pointer" onClick={onSeek}>
                             <div className="h-full bg-white group-hover:bg-emerald-400 rounded-full" style={{ width: `${pct}%` }} />
                         </div>
                         <div className="w-10 text-xs tabular-nums text-slate-400">
@@ -434,10 +419,14 @@ function PlayerBar({
                             min={0}
                             max={1}
                             step={0.01}
+                            value={volume}
                             onChange={onVolumeChange}
                             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                         />
-                        <div className="h-full bg-white group-hover:bg-emerald-400 pointer-events-none" />
+                        <div
+                            className="h-full bg-white group-hover:bg-emerald-400 pointer-events-none"
+                            style={{ width: `${volume * 100}%` }}
+                        />
                     </div>
                 </div>
             </div>
@@ -445,17 +434,14 @@ function PlayerBar({
     );
 }
 
+// === BelowControls (top) — play button ALWAYS green ===
 function BelowControls({ playing, shuffle, onTogglePlaying, onToggleShuffle }) {
     return (
         <div className="mt-4 flex items-center gap-3">
             <button
                 aria-label={playing ? "Pause" : "Play"}
                 onClick={onTogglePlaying}
-                className={`p-3 rounded-full transition-colors duration-200 ease-out hover:scale-105 transition-transform ${
-                    playing
-                        ? "bg-emerald-500 text-slate-900 hover:bg-emerald-400"
-                        : "bg-white text-slate-900 hover:bg-slate-200"
-                }`}
+                className="p-3 rounded-full bg-emerald-500 text-slate-900 hover:bg-emerald-400 transition-colors duration-200 ease-out hover:scale-105 transition-transform"
             >
                 {playing ? <Pause size={18} /> : <Play size={18} />}
             </button>
@@ -479,7 +465,7 @@ export default function App() {
     const [expOpen, setExpOpen] = useState(null);
     const [projOpen, setProjOpen] = useState(null);
 
-    // Music State
+    // Music
     const [songs] = useState(SONGS);
     const [currentSongIndex, setCurrentSongIndex] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
@@ -708,7 +694,7 @@ export default function App() {
                 onSeek={handleSeek}
             />
 
-            <ResumeOverlay open={resumeOpen} onClose={() => setResumeOpen(false)} src={resumeSrc} />
+            <ResumeOverlay open={resumeOpen} onClose={() => setResumeOpen(false)} src={"/resume.pdf"} />
         </div>
     );
 }
