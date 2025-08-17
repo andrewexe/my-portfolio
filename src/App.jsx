@@ -582,7 +582,7 @@ export default function App() {
                         <h3 className="text-lg font-bold mb-2">About me</h3>
                         <p className="text-slate-300 text-sm leading-relaxed">
                             I'm Andrew, a CS + Math student @ UF. I build reliable backends, cloud services,
-                            and ML-powered tools. I love shipping things that make a real impact.
+                            and AI-powered tools. I love shipping things that make a real impact.
                         </p>
                     </aside>
                 </section>
