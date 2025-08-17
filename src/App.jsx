@@ -221,7 +221,7 @@ function TopHeader({ onResume }) {
                         onClick={onResume}
                         className="inline-flex items-center gap-2 rounded-full bg-white text-slate-900 px-3 sm:px-4 py-1.5 text-sm font-semibold hover:bg-slate-200"
                     >
-                        <Download size={16} /> Résumé
+                        <Download size={16} /> Resume
                     </button>
                 </div>
             </div>
