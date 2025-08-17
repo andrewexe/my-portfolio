@@ -20,7 +20,7 @@ const META = {
     avatar: "/headshot.jpeg",
     title: "Portfolio",
     school: "University of Florida",
-    major: "Computer Science",
+    major: "Computer Science, Mathematics",
     gpa: "3.63",
     years: "May 2027",
     location: "Gainesville, FL",
