@@ -133,10 +133,20 @@ const LEADERSHIP = [
         title: "Intern",
         org: "Society of Asian Scientists and Engineers (SASE)",
         range: "Aug 2022 – May 2023",
-        type: "Involvement",
+        type: "Leadership",
         bullets: [
             "Built strong professional relations within the organization, facilitating collaborative projects and mentorship opportunities.",
             "Developed project management, public speaking, and teamwork skills through participation in organizational initiatives.",
+        ],
+    },
+    {
+        title: "Active Member",
+        org: "Various Organizations",
+        range: "Aug 2022 – Present",
+        type: "Involvement",
+        bullets: [
+            "Active member of UF ACM, Open Source Club, SHPE.",
+            "Participant in weekly meetings and volunteer opportunities to serve the Gainesville community.",
         ],
     },
 ];
@@ -525,7 +535,7 @@ export default function App() {
     const [isPlaying, setIsPlaying] = useState(false);
     const [shuffle, setShuffle] = useState(false);
     const [repeat, setRepeat] = useState(false);
-    const [volume, setVolume] = useState(0.7);
+    const [volume, setVolume] = useState(0.25);
     const [trackProgress, setTrackProgress] = useState({ currentTime: 0, duration: 0 });
 
     const audioRef = useRef(null);
