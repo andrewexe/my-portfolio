@@ -20,7 +20,7 @@ const META = {
     avatar: "/headshot.jpeg",
     title: "Portfolio",
     school: "University of Florida",
-    major: "Computer Science, Mathematics",
+    major: "Computer Science, Math",
     gpa: "3.63",
     years: "May 2027",
     location: "Gainesville, FL",
@@ -36,7 +36,7 @@ const EXPERIENCE = [
     {
         title: "Software Development Engineering Intern",
         org: "OakenAG",
-        range: "May '25 – Aug '25",
+        range: "May 2025 – Aug 2025",
         type: "Internship",
         bullets: [
             "Architected an AI-powered code-review pipeline in Java with a custom SDK and CI/CD, reducing manual review by 12 hrs/week.",
@@ -48,7 +48,7 @@ const EXPERIENCE = [
     {
         title: "Software Engineer Intern",
         org: "OakenAG",
-        range: "May '24 – Aug '24",
+        range: "May 2024 – Aug 2024",
         type: "Internship",
         bullets: [
             "Shipped a Java SDK & GCP API for an OCR microservice, improving lease-data accuracy on 100+ docs and reducing human review by 85%.",
@@ -59,7 +59,7 @@ const EXPERIENCE = [
     {
         title: "Undergraduate Researcher",
         org: "UF Machine Intelligence Lab",
-        range: "Jan '24 – Aug '24",
+        range: "Jan 2024 – Aug '2024",
         type: "Research",
         bullets: [
             "Engineered YOLOv7 models for real-time underwater object detection, improving accuracy by 30% on a 5,000+ image dataset.",
@@ -121,7 +121,7 @@ const SONGS = [
 function SectionHeader({ children }) {
     return (
         <div className="flex items-center gap-2 text-slate-200 mt-5 mb-2">
-            <div className="w-3 h-3 rounded-full bg-emerald-500" />
+            <div className="w-3 h-3 rounded-full" style={{ backgroundColor: "#1ED760" }} />
             <h3 className="uppercase tracking-wider text-sm">{children}</h3>
         </div>
     );
@@ -246,7 +246,16 @@ function ResumeOverlay({ open, onClose, src }) {
                     <div className="w-14 text-center text-slate-300">{Math.round(scale * 100)}%</div>
                     <button className="px-3 py-1 rounded-lg bg-[#1f1f1f] border border-[#2a2a2a]" onClick={() => setScale((s) => Math.min(2, s + 0.1))}>+</button>
                     <button className="px-3 py-1 rounded-lg bg-[#1f1f1f] border border-[#2a2a2a]" onClick={() => setScale(1)}>Reset</button>
-                    <a className="px-3 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-500 transition" href={src} download>Download</a>
+                    <a
+                        className="px-3 py-1 rounded-lg transition text-black"
+                        style={{ backgroundColor: "#1ED760" }}
+                        onMouseOver={(e)=>e.currentTarget.style.backgroundColor="#25f278"}
+                        onMouseOut={(e)=>e.currentTarget.style.backgroundColor="#1ED760"}
+                        href={src}
+                        download
+                    >
+                        Download
+                    </a>
                     <button className="px-3 py-1 rounded-lg bg-[#1f1f1f] border border-[#2a2a2a]" onClick={onClose}>Close</button>
                 </div>
             </div>
@@ -347,7 +356,7 @@ function PlayerBar({
                     <div className="flex items-center gap-3">
                         <button
                             className={`p-2 rounded-full transition-colors duration-200 ${
-                                shuffle ? "text-emerald-400" : "text-slate-400 hover:text-slate-100"
+                                shuffle ? "text-[#1ED760]" : "text-slate-400 hover:text-slate-100"
                             }`}
                             onClick={onToggleShuffle}
                             aria-label="Shuffle"
@@ -379,7 +388,7 @@ function PlayerBar({
                             aria-label={repeat ? "Repeat: on" : "Repeat: off"}
                             title={repeat ? "Repeat current track (on)" : "Repeat current track (off)"}
                             className={`relative p-2 rounded-full transition-colors duration-200 ${
-                                repeat ? "text-emerald-400" : "text-slate-400 hover:text-slate-100"
+                                repeat ? "text-[#1ED760]" : "text-slate-400 hover:text-slate-100"
                             }`}
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
@@ -391,7 +400,7 @@ function PlayerBar({
                                 <path d="M21 13v1a4 4 0 0 1-4 4H3"/>
                             </svg>
                             {repeat && (
-                                <span className="absolute -top-1 -right-1 text-[10px] leading-none px-1.5 py-[2px] rounded-full bg-emerald-500 text-black">1</span>
+                                <span className="absolute -top-1 -right-1 text-[10px] leading-none px-1.5 py-[2px] rounded-full text-black" style={{ backgroundColor: "#1ED760" }}>1</span>
                             )}
                         </button>
                     </div>
@@ -402,7 +411,7 @@ function PlayerBar({
                             {formatTime(trackProgress.currentTime)}
                         </div>
                         <div className="h-1 flex-1 bg-slate-700 rounded-full group cursor-pointer" onClick={onSeek}>
-                            <div className="h-full bg-white group-hover:bg-emerald-400 rounded-full" style={{ width: `${pct}%` }} />
+                            <div className="h-full rounded-full" style={{ width: `${pct}%`, backgroundColor: "white" }} />
                         </div>
                         <div className="w-10 text-xs tabular-nums text-slate-400">
                             {formatTime(trackProgress.duration)}
@@ -424,8 +433,8 @@ function PlayerBar({
                             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                         />
                         <div
-                            className="h-full bg-white group-hover:bg-emerald-400 pointer-events-none"
-                            style={{ width: `${volume * 100}%` }}
+                            className="h-full pointer-events-none"
+                            style={{ width: `${volume * 100}%`, backgroundColor: "white" }}
                         />
                     </div>
                 </div>
@@ -441,17 +450,25 @@ function BelowControls({ playing, shuffle, onTogglePlaying, onToggleShuffle }) {
             <button
                 aria-label={playing ? "Pause" : "Play"}
                 onClick={onTogglePlaying}
-                className="p-3 rounded-full bg-emerald-500 text-slate-900 hover:bg-emerald-400 transition-colors duration-200 ease-out hover:scale-105 transition-transform"
+                className="p-3 rounded-full text-slate-900 transition-colors duration-200 ease-out hover:scale-105 transition-transform"
+                style={{ backgroundColor: "#1ED760" }}
+                onMouseOver={(e)=>e.currentTarget.style.backgroundColor="#25f278"}
+                onMouseOut={(e)=>e.currentTarget.style.backgroundColor="#1ED760"}
             >
                 {playing ? <Pause size={18} /> : <Play size={18} />}
             </button>
             <button
                 aria-label="Shuffle"
                 onClick={onToggleShuffle}
-                className={`p-3 rounded-full border transition-colors duration-200 ${
-                    shuffle ? "bg-emerald-500 text-slate-900 border-emerald-500" : "bg-white/10 text-slate-100 border-white/10 hover:bg-white/15"
-                }`}
+                className="p-3 rounded-full border transition-colors duration-200"
+                style={
+                    shuffle
+                        ? { backgroundColor: "#1ED760", color: "#0a0a0a", borderColor: "#1ED760" }
+                        : { backgroundColor: "rgba(255,255,255,0.1)", color: "white", borderColor: "rgba(255,255,255,0.1)" }
+                }
                 title="Shuffle"
+                onMouseOver={(e)=>{ if(!shuffle) e.currentTarget.style.backgroundColor="rgba(255,255,255,0.15)"; }}
+                onMouseOut={(e)=>{ if(!shuffle) e.currentTarget.style.backgroundColor="rgba(255,255,255,0.1)"; }}
             >
                 <Shuffle size={18} />
             </button>
