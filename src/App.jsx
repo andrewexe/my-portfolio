@@ -116,6 +116,31 @@ const PROJECTS = [
     },
 ];
 
+// NEW: Leadership & Involvement
+const LEADERSHIP = [
+    {
+        title: "Internal Vice President",
+        org: "Pi Delta Psi Fraternity Inc.",
+        range: "May 2023 – Present",
+        type: "Leadership",
+        bullets: [
+            "Act as a liaison between members and the executive board, delegating tasks to 50+ members to ensure smooth operation.",
+            "Spearheaded 8+ professional and social events in collaboration with other groups, strengthening inter-organizational relations.",
+            "Designed and promoted recruitment events and graphics, increasing intake results by over 200%.",
+        ],
+    },
+    {
+        title: "Intern",
+        org: "Society of Asian Scientists and Engineers (SASE)",
+        range: "Aug 2022 – May 2023",
+        type: "Involvement",
+        bullets: [
+            "Built strong professional relations within the organization, facilitating collaborative projects and mentorship opportunities.",
+            "Developed project management, public speaking, and teamwork skills through participation in organizational initiatives.",
+        ],
+    },
+];
+
 const SKILLS = [
     "C++","Java","Python","JavaScript","TypeScript","SQL","Spring Boot","React","Node.js","Docker","PostgreSQL","AWS","GCP","Azure","Git"
 ];
@@ -492,6 +517,7 @@ export default function App() {
     const [resumeOpen, setResumeOpen] = useState(false);
     const [expOpen, setExpOpen] = useState(null);
     const [projOpen, setProjOpen] = useState(null);
+    const [leadOpen, setLeadOpen] = useState(null); // NEW
 
     // Music
     const [songs] = useState(SONGS);
@@ -674,6 +700,35 @@ export default function App() {
                                 />
                                 <Collapsible open={projOpen === i}>
                                     <Bullets items={p.bullets} />
+                                </Collapsible>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
+                {/* NEW: Leadership & Involvement */}
+                <section id="leadership" className="mt-8">
+                    <SectionHeader>Leadership &amp; Involvement</SectionHeader>
+                    <div className="rounded-2xl border border-[#2a2a2a] bg-[#181818]/70 p-2">
+                        <div className="grid grid-cols-12 text-slate-400 text-xs uppercase tracking-wider px-3 py-2">
+                            <div className="col-span-1">#</div>
+                            <div className="col-span-6">Title</div>
+                            <div className="col-span-3">Dates</div>
+                            <div className="col-span-2">Type</div>
+                        </div>
+                        {LEADERSHIP.map((l, i) => (
+                            <div key={i} className="rounded-lg">
+                                <Row
+                                    idx={i + 1}
+                                    title={l.title}
+                                    org={l.org}
+                                    range={l.range}
+                                    type={l.type}
+                                    expanded={leadOpen === i}
+                                    onClick={() => setLeadOpen(leadOpen === i ? null : i)}
+                                />
+                                <Collapsible open={leadOpen === i}>
+                                    <Bullets items={l.bullets} />
                                 </Collapsible>
                             </div>
                         ))}
