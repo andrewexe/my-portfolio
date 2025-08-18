@@ -94,13 +94,24 @@ const PROJECTS = [
     },
     {
         title: "Bytes of Love",
-        org: "Game/Story",
+        org: "Personal",
         range: "2024",
         type: "Project",
         bullets: [
             "Implemented branching logic & event handlers for 15+ features across a 50+ person team.",
             "Led a 6-person UI/UX sub-team to refactor layout engines, asset pipelines, and styles for higher engagement.",
             "Integrated Ren’Py scripting with TypeScript tooling to streamline interactive storyline deployment.",
+        ],
+    },
+    {
+        title: "Huddle",
+        org: "Personal",
+        range: "2024",
+        type: "Project",
+        bullets: [
+            "Conceptualized and launched an iOS application connecting athletes, facilitating gameplay sessions, and expanding player networks.",
+            "Constructed a Swift-based UI with 10 custom components, achieving functionality parity while cutting load times by 40%.",
+            "Launched Firebase Authentication and Cloud Firestore, managing data records with 99.9% uptime.",
         ],
     },
 ];
