@@ -17,11 +17,11 @@ import {
 // === Data ===
 const META = {
     name: "Andrew Huang",
-    avatar: "/headshot.jpeg",
+    avatar: "/pfp.jpeg",
     title: "Portfolio",
     school: "University of Florida",
     major: "Computer Science, Math",
-    gpa: "3.63",
+    gpa: "3.67",
     years: "May 2027",
     location: "Gainesville, FL",
 };
@@ -33,40 +33,58 @@ const CONTACT = [
 ];
 
 const EXPERIENCE = [
-    {
-        title: "Software Development Engineering Intern",
-        org: "OakenAG",
-        range: "May 2025 – Aug 2025",
-        type: "Internship",
-        bullets: [
-            "Architected an AI-powered code-review pipeline in Java with a custom SDK and CI/CD, reducing manual review by 12 hrs/week.",
-            "Integrated lease-data pipelines generating 20+ formatted receipts/day; cut manual creation by 80%.",
-            "Containerized PostgreSQL with Docker for consistent schema management via DBeaver.",
-            "Drove E2E tuning on LLM outputs with Agile workflows (Jira/Confluence), boosting suggestion accuracy from 85%→98% over 50+ test cases.",
-        ],
-    },
-    {
-        title: "Software Engineer Intern",
-        org: "OakenAG",
-        range: "May 2024 – Aug 2024",
-        type: "Internship",
-        bullets: [
-            "Shipped a Java SDK & GCP API for an OCR microservice, improving lease-data accuracy on 100+ docs and reducing human review by 85%.",
-            "Designed case logic with Google Vertex AI to increase extraction precision by 30%.",
-            "Built a Spring Boot microservice handling 10+ daily requests with 99.9% uptime; added unit tests & Postman validation.",
-        ],
-    },
-    {
-        title: "Undergraduate Researcher",
-        org: "UF Machine Intelligence Lab",
-        range: "Jan 2024 – Aug '2024",
-        type: "Research",
-        bullets: [
-            "Engineered YOLOv7 models for real-time underwater object detection, improving accuracy by 30% on a 5,000+ image dataset.",
-            "Enhanced ROS mission planning/vision/control modules to improve responsiveness and reliability.",
-            "Added async support via custom Python packaging; enabled the AUV to complete 20+ missions.",
-        ],
-    },
+  {
+      org: "Software Engineer Intern",
+      title: "Pinterest",
+      range: "May '26 – Aug '26",
+      type: "Internship",
+      bullets: [
+        "Incoming Summer 2026",
+      ],
+  },
+  {
+      org: "Software Engineer Intern",
+      title: "Sycomp",
+      range: "Jan '26 – May '26",
+      type: "Internship",
+      bullets: [
+        "Incoming Spring 2026",
+      ],
+  },
+  {
+    org: "Software Engineer Intern",
+    title: "Oaken",
+    range: "May '25 – Aug '25",
+    type: "Internship",
+    bullets: [
+      "Architected an AI-powered code-review pipeline in Java with a custom SDK and CI/CD, reducing manual review by 12 hrs/week.",
+      "Integrated lease-data pipelines generating 20+ formatted receipts/day; cut manual creation by 80%.",
+      "Containerized PostgreSQL with Docker for consistent schema management via DBeaver.",
+      "Drove E2E tuning on LLM outputs with Agile workflows (Jira/Confluence), boosting suggestion accuracy from 85%→98% over 50+ test cases.",
+    ],
+  },
+  {
+    org: "Software Engineer Intern",
+    title: "Oaken",
+    range: "May '24 – Aug '24",
+    type: "Internship",
+    bullets: [
+      "Shipped a Java SDK & GCP API for an OCR microservice, improving lease-data accuracy on 100+ docs and reducing human review by 85%.",
+      "Designed case logic with Google Vertex AI to increase extraction precision by 30%.",
+      "Built a Spring Boot microservice handling 10+ daily requests with 99.9% uptime; added unit tests & Postman validation.",
+    ],
+  },
+  {
+    org: "Undergraduate Researcher",
+    title: "Machine Intelligence Lab",
+    range: "Jan '24 – Aug '24",
+    type: "Research",
+    bullets: [
+      "Engineered YOLOv7 models for real-time underwater object detection, improving accuracy by 30% on a 5,000+ image dataset.",
+      "Enhanced ROS mission planning/vision/control modules to improve responsiveness and reliability.",
+      "Added async support via custom Python packaging; enabled the AUV to complete 20+ missions.",
+    ],
+  },
 ];
 
 const PROJECTS = [
