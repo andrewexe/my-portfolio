@@ -35,15 +35,6 @@ const CONTACT = [
 const EXPERIENCE = [
   {
       org: "Software Engineer Intern",
-      title: "Pinterest",
-      range: "May '26 – Aug '26",
-      type: "Internship",
-      bullets: [
-        "Incoming Summer 2026",
-      ],
-  },
-  {
-      org: "Software Engineer Intern",
       title: "Sycomp",
       range: "Jan '26 – May '26",
       type: "Internship",
