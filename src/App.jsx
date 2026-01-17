@@ -21,7 +21,7 @@ const META = {
     title: "Portfolio",
     school: "University of Florida",
     major: "Computer Science, Math",
-    gpa: "3.67",
+    gpa: "3.75",
     years: "May 2027",
     location: "Gainesville, FL",
 };
